@@ -10,7 +10,7 @@ namespace APPZ.DAL.Repositories
 {
     public interface IGenericRepository<TEntity, TId> where TEntity : class, IEntity<TId>
     {
-           Task<List<TEntity>> GetAsync(
+        Task<List<TEntity>> GetAsync(
            Expression<Func<TEntity, bool>> filter = null,
            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null

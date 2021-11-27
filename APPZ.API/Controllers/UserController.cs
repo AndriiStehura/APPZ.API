@@ -16,7 +16,7 @@ namespace APPZ.API.Controllers
             _userService = userService;
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userService.GetAllUsersAsync();
@@ -30,10 +30,17 @@ namespace APPZ.API.Controllers
             return Ok(user);
         }
 
-        [HttpGet("new")]
-        public async Task<IActionResult> GetUser([FromBody] User user)
+        [HttpPost]
+        public async Task<IActionResult> NewUser([FromBody] User user)
         {
             await _userService.AddUserAsync(user);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromBody] User user)
+        {
+            await _userService.UpdateUserAsync(user);
             return Ok();
         }
     }
