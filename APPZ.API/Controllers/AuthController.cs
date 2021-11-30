@@ -26,10 +26,11 @@ namespace APPZ.API.Controllers
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn(AuthDTO authDTO)
         {
-            if(await _authService.Authentificate(authDTO))
+            var user = await _authService.Authentificate(authDTO);
+            if (user != null)
             {
-                await Authentificate(authDTO.Email);
-                return Ok();
+                await Authentificate(user);
+                return Ok(user);
             }
 
             return Unauthorized();
@@ -38,27 +39,29 @@ namespace APPZ.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(User user)
         {
+            UserDTO dto = null;
             try
             {
-                await _authService.Register(user);
-                await Authentificate(user.Email);
+                dto = await _authService.Register(user);
+                await Authentificate(dto);
             }
             catch(ArgumentException ae)
             {
                 return BadRequest(ae.Message);
             }
 
-            return Ok();
+            return Ok(dto);
         }
 
-        private async Task Authentificate(string email)
+        private async Task Authentificate(UserDTO user)
         {
             var claims = new List<Claim>()
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, email)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email)
                 };
-            if(await _authService.IsAdminAsync(email))
+            if(await _authService.IsAdminAsync(user.Email))
             {
+                user.IsAdmin = true;
                 claims.Add(new Claim("role", "admin"));
             }
             var identity = new ClaimsIdentity(

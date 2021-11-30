@@ -18,19 +18,26 @@ namespace APPZ.BLL.Services
             _unit = unit;
         }
 
-        public async Task<bool> Authentificate(AuthDTO authDTO)
+        public async Task<UserDTO> Authentificate(AuthDTO authDTO)
         {
             var user = (await _unit.UsersRepository.GetAsync(include: x => x.Include(y => y.Identity)))
                 .FirstOrDefault(x => string.Equals(x.Email, authDTO.Email, StringComparison.CurrentCultureIgnoreCase));
-            if(user != null)
+            if(user != null && user.Identity.PasswordHash == authDTO.PasswordHash)
             {
-                return user.Identity.PasswordHash == authDTO.PasswordHash;
+                return new UserDTO
+                {
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    Group = user.Group,
+                    Id = user.Id,
+                    LastName = user.LastName
+                };
             }
 
-            return false;
+            return null;
         }
 
-        public async Task Register(User user)
+        public async Task<UserDTO> Register(User user)
         {
             var users = await _unit.UsersRepository.GetAsync();
             if (users.Any(x => string.Equals(x.Email, user.Email, StringComparison.CurrentCultureIgnoreCase)))
@@ -40,6 +47,15 @@ namespace APPZ.BLL.Services
 
             await _unit.UsersRepository.InsertAsync(user);
             await _unit.SaveAsync();
+
+            return new UserDTO
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                Group = user.Group,
+                Id = user.Id,
+                LastName = user.LastName
+            };
         }
 
         public async Task<bool> IsAdminAsync(string email) =>

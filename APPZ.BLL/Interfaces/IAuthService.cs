@@ -6,8 +6,8 @@ namespace APPZ.BLL.Interfaces
 {
     public interface IAuthService
     {
-        Task<bool> Authentificate(AuthDTO authDTO);
-        Task Register(User user);
+        Task<UserDTO> Authentificate(AuthDTO authDTO);
+        Task<UserDTO> Register(User user);
         Task<bool> IsAdminAsync(string email);
     }
 }
