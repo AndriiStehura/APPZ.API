@@ -49,7 +49,7 @@ namespace APPZ.BLL.Services
         public async Task<LabTask> GetTaskByFilters(TaskFilterDTO filter)
         {
             var tasksByTheme = await _unit.TasksRepository.GetAsync(
-                x => x.ThemeId == filter.ThemeId,
+                x => x.ThemeId == filter.ThemeId && x.ComplexityLevel == filter.Complexity,
                 include: x => x.Include(y => y.Theme));
 
             if(tasksByTheme.Count == 0)
