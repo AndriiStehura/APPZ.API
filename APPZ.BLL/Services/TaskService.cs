@@ -54,7 +54,7 @@ namespace APPZ.BLL.Services
 
             if(tasksByTheme.Count == 0)
             {
-                throw new InvalidOperationException("No tasks was found.");
+                return null;
             }
 
             Random r = new Random();

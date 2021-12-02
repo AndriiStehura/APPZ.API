@@ -27,19 +27,8 @@ namespace APPZ.API.Controllers
             Ok(await _taskService.GetTaskByIdAsync(id));
 
         [HttpGet("byfilter")]
-        public async Task<IActionResult> GetTaskByFilter([FromQuery] TaskFilterDTO filter)
-        {
-            LabTask task = null;
-            try
-            {
-                task = await _taskService.GetTaskByFilters(filter);
-            }
-            catch(InvalidOperationException ioe)
-            {
-                return NotFound(ioe.Message);
-            }
-            return Ok(task);
-        }
+        public async Task<IActionResult> GetTaskByFilter([FromQuery] TaskFilterDTO filter) => 
+            Ok(await _taskService.GetTaskByFilters(filter));
 
         [HttpPost]
         public async Task<IActionResult> AddNewTask([FromBody] LabTask task)
