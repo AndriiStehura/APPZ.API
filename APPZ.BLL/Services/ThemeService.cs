@@ -1,7 +1,7 @@
 ﻿using APPZ.BLL.Interfaces;
 using APPZ.DAL;
+using APPZ.DAL.DTO;
 using APPZ.DAL.Entities;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,14 +17,32 @@ namespace APPZ.BLL.Services
             _unit = unit;
         }
 
-        public async Task<IEnumerable<TaskTheme>> GetAllThemesAsync() =>
-            await _unit.ThemesRepository.GetAsync(include: x => x.Include(y => y.Tasks));
+        public async Task<IEnumerable<ThemeDTO>> GetAllThemesAsync() =>
+            (await _unit.ThemesRepository.GetAsync())
+            .Select(x => new ThemeDTO 
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Tasks = _unit.TasksRepository.GetAsync(y => y.ThemeId == x.Id).Result
+            })
+            .ToList();
 
-        public async Task<TaskTheme> GetThemeByIdAsync(int id) =>
-            (await _unit.ThemesRepository.GetAsync(
-                x => x.Id == id,
-                include: x => x.Include(y => y.Tasks)))
-            .FirstOrDefault();
+        public async Task<ThemeDTO> GetThemeByIdAsync(int id)
+        {
+            ThemeDTO dto = null;
+            var theme = (await _unit.ThemesRepository.GetAsync()).FirstOrDefault();
+            if(theme != null)
+            {
+                var tasks = await _unit.TasksRepository.GetAsync(y => y.ThemeId == theme.Id);
+                dto = new ThemeDTO
+                {
+                    Id = theme.Id,
+                    Name = theme.Name,
+                    Tasks = tasks
+                };
+            }
+            return dto;
+        }
 
         public async Task AddThemeAsync(TaskTheme theme)
         {

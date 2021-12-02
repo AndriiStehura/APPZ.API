@@ -8,8 +8,7 @@ namespace APPZ.DAL.TableConfigurations
     {
         public void Configure(EntityTypeBuilder<TaskTheme> builder)
         {
-            builder.ToTable("Themes")
-                .HasMany(x => x.Tasks);
+            builder.ToTable("Themes");
         }
     }
 }
