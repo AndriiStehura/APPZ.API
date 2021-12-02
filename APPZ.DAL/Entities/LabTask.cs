@@ -15,7 +15,5 @@ namespace APPZ.DAL.Entities
         public int ThemeId { get; set; }
 
         public TaskTheme Theme { get; set; }
-
-        public int AllowedChecks { get; set; }
     }
 }
