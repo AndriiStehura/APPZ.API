@@ -147,10 +147,17 @@ namespace APPZ.Test
         public async Task UpdateUserTest()
         {
             var user = await _userService.GetUserByIdAsync(1);
-            user.Group = "PZ";
-            await _userService.UpdateUserAsync(user);
+            var userDto = new UpdateUserDTO 
+            { 
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Group = "PZ",
+                Id = user.Id
+            };
+            await _userService.UpdateUserAsync(userDto);
             var updatedUser = await _userService.GetUserByIdAsync(1);
-            Assert.AreEqual(user.Group, updatedUser.Group);
+            Assert.AreEqual(userDto.Group, updatedUser.Group);
         }
 
         [Test]

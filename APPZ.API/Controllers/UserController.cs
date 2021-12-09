@@ -1,4 +1,5 @@
 ﻿using APPZ.BLL.Interfaces;
+using APPZ.DAL.DTO;
 using APPZ.DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -38,9 +39,16 @@ namespace APPZ.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromBody] User user)
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO userDto)
         {
-            await _userService.UpdateUserAsync(user);
+            await _userService.UpdateUserAsync(userDto);
+            return Ok();
+        }
+
+        [HttpPut("/password")]
+        public async Task<IActionResult> UpdatePassword([FromBody] PasswordDTO passwordDTO)
+        {
+            await _userService.UpdatePasswordAsync(passwordDTO);
             return Ok();
         }
     }

@@ -1,4 +1,5 @@
-﻿using APPZ.DAL.Entities;
+﻿using APPZ.DAL.DTO;
+using APPZ.DAL.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,7 +9,8 @@ namespace APPZ.BLL.Interfaces
     {
         Task AddUserAsync(User user);
         Task<User> GetUserByIdAsync(int id);
-        Task UpdateUserAsync(User user);
+        Task UpdateUserAsync(UpdateUserDTO user);
         Task<IEnumerable<User>> GetAllUsersAsync();
+        Task UpdatePasswordAsync(PasswordDTO passwordDTO);
     }
 }
