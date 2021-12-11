@@ -18,7 +18,8 @@ namespace APPZ.Test
         private IUnitOfWork _unitOfWork;
         private IUserService _userService;
         private IAuthService _authService;
-        
+        private ITaskService _taskService;
+
         public BLLTest()
         {
             var options = new DbContextOptionsBuilder<APPZDBContext>()
@@ -28,10 +29,13 @@ namespace APPZ.Test
             _context.AddRange(GetUsers());
             _context.AddRange(GetIdentities());
             _context.AddRange(GetAdminRecords());
+            _context.AddRange(GetThemes());
+            _context.AddRange(GetTasks());
             _context.SaveChanges();
             _unitOfWork = new UnitOfWork(_context);
             _userService = new UserService(_unitOfWork);
             _authService = new AuthService(_unitOfWork);
+            _taskService = new TaskService(_unitOfWork);
         }
 
         private List<User> GetUsers() => new List<User>()
@@ -106,6 +110,25 @@ namespace APPZ.Test
         {
             new AdminRecord { UserId = 1},
             new AdminRecord { UserId = 4},
+        };
+
+        private List<TaskTheme> GetThemes() => new List<TaskTheme>
+        {
+            new TaskTheme
+            {
+                Name = "Lol kek"
+            }
+        };
+
+        private List<LabTask> GetTasks() => new List<LabTask>
+        {
+            new LabTask
+            {
+                Answer = "andrii",
+                ComplexityLevel = DAL.Enums.Complexity.Low,
+                Description = "Call me",
+                ThemeId = 1
+            }
         };
 
         [Test, Order(1)]
@@ -247,6 +270,24 @@ namespace APPZ.Test
             {
                 Assert.Pass();
             }
+        }
+
+        [Test]
+        public async Task CheckAnswerTest()
+        {
+            var answer = new AnswerDTO 
+            {
+                Answer = "andrii",
+                TaskId = 1,
+                UserId = 1
+            };
+
+            var result = await _taskService.EvaluateAnswer(answer);
+            Assert.AreEqual(100, result.RightInPercent);
+
+            answer.Answer = "ndrii";
+            result = await _taskService.EvaluateAnswer(answer);
+            Assert.AreNotEqual(100, result.RightInPercent);
         }
     }
 }
