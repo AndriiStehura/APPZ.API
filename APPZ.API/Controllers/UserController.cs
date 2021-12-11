@@ -45,7 +45,7 @@ namespace APPZ.API.Controllers
             return Ok();
         }
 
-        [HttpPut("/password")]
+        [HttpPut("password")]
         public async Task<IActionResult> UpdatePassword([FromBody] PasswordDTO passwordDTO)
         {
             await _userService.UpdatePasswordAsync(passwordDTO);
