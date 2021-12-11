@@ -78,7 +78,8 @@ namespace APPZ.BLL.Services
             {
                 Grade = rightInPercent,
                 TaskId = answer.TaskId,
-                UserId = answer.UserId
+                UserId = answer.UserId,
+                Date = DateTime.Now
             });
             await _unit.SaveAsync();
 

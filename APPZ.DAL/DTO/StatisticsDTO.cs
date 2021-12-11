@@ -1,8 +1,8 @@
-﻿using System;
+﻿using APPZ.DAL.Entities;
 
-namespace APPZ.DAL.Entities
+namespace APPZ.DAL.DTO
 {
-    public class TaskStatistics: IEntity<int>
+    public class StatisticsDTO
     {
         public int Id { get; set; }
         public int UserId { get; set; }
@@ -10,6 +10,6 @@ namespace APPZ.DAL.Entities
         public int TaskId { get; set; }
         public LabTask Task { get; set; }
         public double Grade { get; set; }
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
     }
 }
