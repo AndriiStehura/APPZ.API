@@ -18,11 +18,15 @@ namespace APPZ.BLL.Services
 
         public async Task<IEnumerable<TaskStatistics>> GetAllStatisticsAsync() =>
             await _unit.StatisticsRepository.GetAsync(
-                include: x => x.Include(y => y.Task).Include(y => y.User));
+                include: x => x.Include(y => y.Task)
+                    .ThenInclude(y => y.Theme)
+                    .Include(y => y.User));
 
         public async Task<IEnumerable<TaskStatistics>> GetStatisticsByUserIdAsync(int userId) =>
             await _unit.StatisticsRepository.GetAsync(
                 x => x.UserId == userId,
-                include: x => x.Include(y => y.Task).Include(y => y.User));
+                include: x => x.Include(y => y.Task)
+                    .ThenInclude(y => y.Theme)
+                    .Include(y => y.User));
     }
 }
